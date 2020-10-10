@@ -1,3 +1,7 @@
+"""echoservice.py implements the echoservice wsgi application.
+
+It defines the app with the /humai/echoservice endpoint and the Flask-SQLAlchemy representation of the Payload DB table.
+"""
 import logging
 
 from json import dumps
@@ -17,10 +21,12 @@ class Payload(db.Model):
 
 
 def create_app():
+    """create_app creates the echoservice wsgi app with the /humai/echoservice endpoint."""
     app = Flask(__name__)
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///./database.sqlite"
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
+    # wire app logger and gunicorn logger
     gunicorn_logger = logging.getLogger("gunicorn.error")
     app.logger.handlers = gunicorn_logger.handlers
     app.logger.setLevel(gunicorn_logger.level)
